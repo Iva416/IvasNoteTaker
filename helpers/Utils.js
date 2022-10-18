@@ -19,5 +19,17 @@ const writeToFile = (destination, content) =>
       }
     });
   };
+
+  const deleteItem = (deleteId, file) => {
+    fs.readFile(file, 'utf8', (err,data) => {
+      if (err) {
+        console.error(err);
+      } else {
+        const parsedData = JSON.parse(data);
+        const newData = parsedData.filter(note => note.id !== deleteId);
+        writeToFile(file, newData);
+      }
+    });
+  }
   
-  module.exports = { readFromFile, writeToFile, readAndAppend };
+  module.exports = { readFromFile, writeToFile, readAndAppend, deleteItem };

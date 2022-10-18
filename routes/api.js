@@ -1,14 +1,13 @@
 
 const notes = require('express').Router();
 const uuid = require('../helpers/uuid.js');
-const { readAndAppend, readFromFile } = require('../helpers/Utils');
+const { readAndAppend, readFromFile, deleteItem } = require('../helpers/Utils');
 
 notes.get('/notes', (req,res) => {
     readFromFile('./db/db.json').then((data) => res.json(JSON.parse(data)))
 });
 
 notes.post('/notes', (req,res) => {
-    res.json(`${req.method} has been posted`)
     const { title, text, } = req.body;
 
     const SaveNote = {
@@ -24,6 +23,10 @@ if (req && req.body) {
         message: 'Your note could not be saved'
     });
 }
+})
+notes.delete('/notes/:id', (req, res) => {
+    deleteItem(req.params.id, './db/db.json')
+    res.sendStatus(204);
 })
 
 module.exports = notes;
